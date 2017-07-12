@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:53:17 by tjeanner          #+#    #+#              #
-#    Updated: 2017/07/12 02:55:47 by tjeanner         ###   ########.fr        #
+#    Updated: 2017/07/12 12:39:12 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,11 +77,11 @@ SRC1 = ft_strlen.c \
 	ft_lstadd.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
-	ft_strrchrindex.c \
+	ft_strchrindex.c \
 
 SRC2 = $(SRC1:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 
