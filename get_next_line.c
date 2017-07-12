@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/12 06:26:25 by tjeanner          #+#    #+#             */
-/*   Updated: 2017/07/12 13:51:56 by tjeanner         ###   ########.fr       */
+/*   Updated: 2017/07/12 14:55:34 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,30 @@
 
 int		get_next_line(const int fd, char **line)
 {
-	char		*buf;
 	static char	*rest = NULL;
+	char		*buf;
 	int			rd;
 	int			pos;
-//	int			state;
 
-	if (rest)
-		*line = ft_strdup(rest);
-	if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1))))
-		return (-1);
-	buf[BUFF_SIZE] = '\0';
-//	if (read(fd, &buf, BUFF_SIZE) < 0)
-//	if (read(fd, buf, BUFF_SIZE) < 0)
-//		return (-1);
-//	*line = ft_strsub(buf, 0, ft_strrchrindex(*line, EOL));
 	rd = 1;
 	pos = -1;
-	if (*line)
-		pos = ft_strchrindex(*line, '\n');
+	if (rest)
+	{
+		*line = ft_strdup(rest);
+		pos = ft_strchrindex(*line, EOL);
+	}
 	while (pos == -1 && rd > 0)
 	{
+		if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1))))
+			return (-1);
+		buf[BUFF_SIZE] = '\0';
 		if ((rd = (read(fd, buf, BUFF_SIZE))) < 0)
 			return (-1);
 		if (!*line)
 			*line = ft_strdup(buf);
 		else
 			*line = ft_strjoin(*line, buf);
-		pos = ft_strchrindex(*line, '\n');
+		pos = ft_strchrindex(*line, EOL);
 	}
 	if (rd <= 0)
 	{
