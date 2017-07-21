@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/17 15:39:33 by tjeanner          #+#    #+#             */
-/*   Updated: 2017/07/21 05:58:47 by tjeanner         ###   ########.fr       */
+/*   Updated: 2017/07/21 07:34:06 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int		ft_strjoin_f(char **s1, char *s2)
 		}
 		else
 		{
-//			free (*s1);
 			*s1 = ft_strdup(s2);
 		}
 	}
@@ -66,8 +65,6 @@ t_list	*ft_makerest(t_list *t_first, int curr_fd, char *rest)
 	while (tmp && tmp->next &&
 			((fd_info *)tmp->content)->fd != curr_fd)
 		tmp = tmp->next;
-//	if (tmp->next && ((fd_info *)tmp->next->content)->fd == curr_fd)
-//		tmp = tmp->next;
 	if (tmp && ((fd_info *)tmp->content)->fd == curr_fd)
 		ft_strcpy(((fd_info *)tmp->content)->rest, rest);
 	else
@@ -77,23 +74,27 @@ t_list	*ft_makerest(t_list *t_first, int curr_fd, char *rest)
 		new_content->fd = curr_fd;
 		ft_strcpy(new_content->rest, rest);
 		if (!t_first)
-		{
-			tmp = ft_lstnew(new_content, sizeof(fd_info));
-			//t_first = ft_lstnew(new_content, sizeof(fd_info));
-			t_first = tmp;
-		}
+			t_first = ft_lstnew(new_content, sizeof(fd_info));
 		else
 		{
-		//	ft_lstadd(&t_first, tmp);
 			if (t_first->next == NULL)
 				t_first->next = ft_lstnew(new_content, sizeof(fd_info));
 			else
 				tmp->next = ft_lstnew(new_content, sizeof(fd_info));
 		}
-//		t_first = tmp;
 		free(new_content);
 	}
 	return (t_first);
+}
+
+void	ft_delrest(t_list *t_first, int fd)
+{
+	t_list	*tmp;
+
+	tmp = t_first;
+	while (tmp && tmp->next &&
+			((fd_info *)tmp->content)->fd != fd)
+		tmp = tmp->next;
 }
 
 int		get_next_line(const int fd, char **line)
@@ -115,7 +116,9 @@ int		get_next_line(const int fd, char **line)
 	while (!pos && rd == BUFF_SIZE)
 	{
 		if ((rd = read(fd, buf, BUFF_SIZE)) < 1)
+		{
 			return (rd = (rd == 0)? 0: -1);
+		}
 		buf[rd] = '\0';
 		ft_strjoin_f(line, buf);
 		pos = ft_strchr(*line, EOL);
